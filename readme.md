@@ -1,8 +1,8 @@
-# Wavify
+# Wavify-ts
 
 [![NPM version](https://img.shields.io/npm/v/wavify)](https://npmjs.org/package/wavify)
 
-Wavify is a simple library to draw animated wave on a website.
+Wavify-ts is a fork of the orginal Wavify - simple library to draw animated wave on a website.
 
 The library is heavily adapted from a codepen board (https://codepen.io/grimor/pen/qbXLdN).
 
