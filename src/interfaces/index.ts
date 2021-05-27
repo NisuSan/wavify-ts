@@ -21,4 +21,10 @@ export interface IWavifyOutput {
   updateColor(options: IWavifyParams): void
 }
 
+export interface ICreateWavesParams {
+  container?: string,
+  waveIdPrefix?: string,
+  wavesSetup: Array<IWavifyParams>
+}
+
 export type IWavifyPoints = { x: number, y: number }

@@ -1,6 +1,12 @@
-import { IWavifyOutput, IWavifyParams, IWavifyPoints, IWavifyUpdateColorParams } from './interfaces'
+import { ICreateWavesParams, IWavifyOutput, IWavifyParams, IWavifyPoints, IWavifyUpdateColorParams } from './interfaces'
 import { TweenMax, Power1 } from 'gsap'
 import { debounce } from 'ts-debounce'
+
+const defCreateWavesParams: ICreateWavesParams = { 
+  container: 'body', 
+  waveIdPrefix: 'c-wave',
+  wavesSetup: []
+}
 
 export function wavify(wave: HTMLOrSVGElement, options: IWavifyParams): IWavifyOutput {
   let settings: IWavifyParams = Object.assign(
@@ -210,30 +216,31 @@ export function wavify(wave: HTMLOrSVGElement, options: IWavifyParams): IWavifyO
   }
 }
 
-export function createWaves(options: Array<IWavifyParams>, container?: string): Array<IWavifyOutput> {
-  if(options.length == 0) return [] as Array<IWavifyOutput>
+export function createWaves(params: ICreateWavesParams ): Array<IWavifyOutput> {
+  params = {...defCreateWavesParams, ...params}
+  if(params.wavesSetup.length == 0) return [] as Array<IWavifyOutput>
 
-  const containerElement: HTMLDivElement | HTMLBodyElement = document.querySelector(container || 'body')!
+  const containerElement: HTMLDivElement | HTMLBodyElement = document.querySelector(params.container!)!
   const waves: Array<IWavifyOutput> = []
 
   let svgs: string = ''
-  for (let index = 0; index < options.length; index++) {
+  for (let index = 0; index < params.wavesSetup.length; index++) {
     svgs += `
       <svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg" 
         style="position: absolute; bottom:0; z-index: ${index+1};"
       >
         <defs></defs>
-        <path id="c-wave-${index}" d=""/>
+        <path id="${params.waveIdPrefix}-${index}" d=""/>
     </svg>`
   }
 
   containerElement.innerHTML = svgs
 
-  for (let index = 0; index < options.length; index++) {    
-    const setup = options[index]
+  for (let index = 0; index < params.wavesSetup.length; index++) {    
+    const setup = params.wavesSetup[index]
 
-    const waveSvg: HTMLElement | null = document.getElementById(`c-wave-${index}`)
-    if(!waveSvg) throw Error(`Wave wiht index ${index} is null`)
+    const waveSvg: HTMLElement | null = document.getElementById(`${params.waveIdPrefix}-${index}`)
+    if(!waveSvg) throw Error(`Wave with index ${index} is null`)
 
     waves.push(wavify(waveSvg, setup))
   }
